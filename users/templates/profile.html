@@ -403,6 +403,8 @@
       overflow: hidden;
       transition: transform 0.3s, box-shadow 0.3s;
       border: 1px solid rgba(0, 0, 0, 0.05);
+      position: relative;
+      cursor: pointer;
     }
 
     .course-card:hover {
@@ -445,12 +447,27 @@
       color: var(--dark);
     }
 
+    .course-author {
+      font-size: 14px;
+      color: var(--gray);
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .course-author i {
+      font-size: 12px;
+    }
+
     .course-info {
       display: flex;
       justify-content: space-between;
       margin-bottom: 18px;
       color: var(--gray);
       font-size: 14px;
+      flex-wrap: wrap;
+      gap: 10px;
     }
 
     .course-info span {
@@ -496,6 +513,8 @@
       font-weight: 600;
       transition: all 0.3s;
       box-shadow: 0 4px 10px rgba(106, 17, 203, 0.25);
+      z-index: 10;
+      position: relative;
     }
 
     .course-action:hover {
@@ -837,20 +856,23 @@
       <div class="courses-grid">
         {% for course in enrolled_courses %}
         <!-- Course Card -->
-        <div class="course-card">
+        <div class="course-card" onclick="window.location.href='{% url 'enroll_course' course.pk %}'">
           <div class="course-img" 
               style="background-image: url('{% if course.profile_image %}{{ course.profile_image.url }}{% else %}https://source.unsplash.com/random/400x200/?education,{{ forloop.counter }}{% endif %}')">
               <span style="z-index: 2; text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">
-                  <!-- {{ course.title }} -->
+                  {{ course.title }}
               </span>
           </div>
-
-
           <div class="course-content">
             <h3 class="course-title">{{ course.title }}</h3>
+            <div class="course-author">
+              <i class="fas fa-user-tie"></i> By {{ course.author }}
+            </div>
             <div class="course-info">
-              <span><i class="far fa-clock"></i> {{ course.duration }} weeks</span>
+              <span><i class="far fa-clock"></i> {{ course.min_duration|default:"0" }} min</span>
               <span><i class="far fa-file-alt"></i> {{ course.modules_count }} modules</span>
+              <span><i class="fas fa-star"></i> {{ course.rating|floatformat:1 }}</span>
+              <span><i class="fas fa-users"></i> {{ course.students_count }}</span>
             </div>
             <div class="progress-container">
               <div class="progress-bar">
@@ -861,7 +883,7 @@
                 <span>{{ course.progress }}%</span>
               </div>
             </div>
-            <a href="{% url 'enroll_course' course.pk %}" class="course-action">
+            <a href="{% url 'enroll_course' course.pk %}" class="course-action" onclick="event.stopPropagation();">
               {% if course.progress == 100 %}Take Final Exam{% else %}Continue Learning{% endif %}
             </a>
           </div>
@@ -894,32 +916,25 @@
       <div class="courses-grid">
         {% for course in courses %}
         <!-- Course Card -->
-        <div class="course-card">
+        <div class="course-card" onclick="window.location.href='{% url 'enroll_course' course.pk %}'">
           <div class="course-img" 
               style="background-image: url('{% if course.profile_image %}{{ course.profile_image.url }}{% else %}https://source.unsplash.com/random/400x200/?education,{{ forloop.counter }}{% endif %}')">
               <span style="z-index: 2; text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">
-                  <!-- {{ course.title }} -->
+                  {{ course.title }}
               </span>
           </div>
           <div class="course-content">
             <h3 class="course-title">{{ course.title }}</h3>
+            <div class="course-author">
+              <i class="fas fa-user-tie"></i> By {{ course.author }}
+            </div>
             <div class="course-info">
-              <!-- <span><i class="far fa-clock"></i> {{ course.duration|default:"N/A" }} weeks</span>
-              <span><i class="far fa-file-alt"></i> {{ course.modules_count|default:"N/A" }} modules</span> -->
-              <span><i class="far fa-clock"></i> {{ course.duration }} weeks</span>
+              <span><i class="far fa-clock"></i> {{ course.min_duration|default:"0" }} min</span>
               <span><i class="far fa-file-alt"></i> {{ course.modules_count }} modules</span>
+              <span><i class="fas fa-star"></i> {{ course.rating|floatformat:1 }}</span>
+              <span><i class="fas fa-users"></i> {{ course.students_count }}</span>
             </div>
-
-            <div class="progress-container">
-              <div class="progress-bar">
-                <div class="progress" style="width: 0%;"></div>
-              </div>
-              <div class="progress-text">
-                <span>Progress</span>
-                <span>{{ course.progress }}%</span>
-              </div>
-            </div>
-            <a href="{% url 'enroll_course' course.pk %}" class="course-action">Enroll Now</a>
+            <a href="{% url 'enroll_course' course.pk %}" class="course-action" onclick="event.stopPropagation();">Enroll Now</a>
           </div>
         </div>
         {% endfor %}
@@ -970,15 +985,6 @@
             navItems.forEach(i => i.classList.remove('active'));
             this.classList.add('active');
           }
-        });
-      });
-
-      // Simulate loading new content when clicking on courses
-      const courseActions = document.querySelectorAll('.course-action');
-      courseActions.forEach(action => {
-        action.addEventListener('click', function(e) {
-          // Let the href handle navigation, just add a loading indicator if needed
-          console.log('Navigating to course...');
         });
       });
 
