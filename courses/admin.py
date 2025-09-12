@@ -14,7 +14,7 @@ class CourseAdmin(admin.ModelAdmin):
 
 @admin.register(Module)
 class ModuleAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'course')
+    list_display = ('title', 'course')
 
 @admin.register(Topic)
 class TopicAdmin(admin.ModelAdmin):

@@ -2,39 +2,221 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <title>{{ module.title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ course.title }} - Modules</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        .module-header {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            padding: 2rem 0;
+            margin-bottom: 2rem;
+            border-radius: 0 0 15px 15px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+        
+        .module-card {
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            margin-bottom: 1.5rem;
+            cursor: pointer;
+            border: none;
+            height: 100%;
+        }
+        
+        .module-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .module-card-body {
+            padding: 1.5rem;
+        }
+        
+        .module-number {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            color: white;
+            border-radius: 50%;
+            font-weight: bold;
+            margin-right: 12px;
+        }
+        
+        .module-title {
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: #343a40;
+            margin-bottom: 0.75rem;
+        }
+        
+        .module-meta {
+            display: flex;
+            justify-content: space-between;
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid #e9ecef;
+        }
+        
+        .module-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .back-to-courses {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s;
+        }
+        
+        .back-to-courses:hover {
+            color: white;
+            gap: 12px;
+        }
+        
+        .progress-container {
+            margin: 1.5rem 0;
+        }
+        
+        .progress-text {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+        
+        .progress-bar {
+            height: 8px;
+            border-radius: 4px;
+            background-color: #e9ecef;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            border-radius: 4px;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: #6c757d;
+        }
+        
+        .empty-state i {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+            color: #dee2e6;
+        }
+        
+        .empty-state p {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+    </style>
 </head>
 <body>
-<div class="container py-4">
-    <h2>{{ module.title }}</h2>
-    <p>{{ module.description }}</p>
-
-    <h4 class="mt-4">Mavzular</h4>
-    <ul class="list-group mb-4">
-        {% for topic in topics %}
-        <li class="list-group-item">{{ topic.title }}</li>
-        {% empty %}
-        <li class="list-group-item text-muted">Mavzular yo‘q</li>
-        {% endfor %}
-    </ul>
-
-    <h4 class="mt-4">Videolar</h4>
-    <div class="row">
-        {% for video in videos %}
-        <div class="col-md-4 mb-3">
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">{{ video.title }}</h5>
-                    <p class="card-text">Davomiyligi: {{ video.duration|default:"-" }}</p>
-                    <a href="{% url 'video_detail' video.pk %}" class="btn btn-primary btn-sm">Ko‘rish</a>
+    <div class="module-header">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center">
+                <div>
+                    <a href="{% url 'profile' %}" class="back-to-courses">
+                        <i class="fas fa-arrow-left"></i>
+                        Back to Courses
+                    </a>
+                    <p>
+                        <a href="{% url 'enroll_course' course.pk %}" class="back-to-courses">
+                        <i class="fas fa-arrow-left"></i>
+                        Back
+                    </a>
+                    </p>
+                    <h1 class="mt-3 mb-0">{{ course.title }}</h1>
+                    <p class="lead mb-0 mt-2">By {{ course.author.get_full_name|default:course.author.username }}</p>
+                </div>
+                <div class="text-end">
+                    <div class="d-inline-block bg-white text-dark px-3 py-2 rounded-pill">
+                        <i class="fas fa-book-open me-1 text-primary"></i>
+                        <span class="fw-bold">{{ modules.count }}</span> Modules
+                    </div>
                 </div>
             </div>
         </div>
-        {% empty %}
-        <p class="text-muted">Videolar yo‘q</p>
-        {% endfor %}
     </div>
+
+    <div class="container">
+        <!-- Course Progress (if enrolled) -->
+        {% if enrollment %}
+        <div class="progress-container">
+            <div class="progress-text">
+                <span>Your Progress</span>
+                <span>{{ enrollment.progress }}% Complete</span>
+            </div>
+            <div class="progress-bar">
+                <div class="progress-fill" style="width: {{ enrollment.progress }}%"></div>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="row">
+            {% for module in modules %}
+            <div class="col-lg-6 col-xl-4 mb-4">
+                <div class="module-card h-100" 
+                    onclick="window.location.href='{% url 'topic_list' module.course.pk %}'" 
+                    style="cursor: pointer;">
+                    <div class="module-card-body">
+                        <div class="d-flex align-items-center mb-3">
+                            <span class="module-number">{{ forloop.counter }}</span>
+                            <h3 class="module-title mb-0">{{ module.title }}</h3>
+                </div>
+                    
+                    <p class="text-muted">{{ module.description|truncatewords:20 }}</p>
+                    
+                    <div class="module-meta">
+                        <span class="module-meta-item">
+                            <i class="far fa-file-alt"></i>
+                            {{ module.topics.count }} lessons
+                        </span>
+                    </div>
+                </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12">
+        <div class="empty-state">
+            <i class="fas fa-folder-open"></i>
+            <p>No modules available for this course yet.</p>
+            <a href="{% url 'profile' %}" class="btn btn-primary btn-lg">
+                <i class="fas fa-arrow-left me-2"></i>
+                Back to Courses
+            </a>
+        </div>
+    </div>
+    {% endfor %}
 </div>
+
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

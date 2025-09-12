@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Course, Enrollment
+from .models import Course, Enrollment, Module, Topic
 from django.contrib import messages
 
 @login_required
@@ -25,4 +25,33 @@ def enroll_course(request, pk):
     return render(request, "enroll_course.html", {
         "course": course,
         "is_enrolled": is_enrolled
+    })
+
+@login_required
+def continue_learning(request, pk):
+    course = get_object_or_404(Course, pk=pk)
+    modules = course.modules.all()
+
+    # Foydalanuvchi enroll bo'lgan kursini tekshiramiz
+    enrollment = Enrollment.objects.filter(user=request.user, course=course).first()
+
+    return render(request, "module_detail.html", {
+        "course": course,
+        "modules": modules,
+        "enrollment": enrollment
+    })
+
+
+@login_required
+def topic_list(request, pk):
+    course = get_object_or_404(Course, pk=pk)
+    topics = Topic.objects.filter(module__course=course)
+
+    # Foydalanuvchi enroll bo'lgan kursini tekshiramiz
+    enrollment = Enrollment.objects.filter(user=request.user, course=course).first()
+
+    return render(request, "topic_list.html", {
+        "course": course,
+        "topics": topics,
+        "enrollment": enrollment
     })

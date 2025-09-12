@@ -245,7 +245,7 @@
                 {% csrf_token %}
                 <div class="card-buttons">
                     {% if is_enrolled %}
-                        <a href="#" class="btn btn-primary">
+                        <a href="{% url 'continue_learning' course.pk %}" class="btn btn-primary">
                             <i class="fas fa-play-circle"></i> Continue Learning
                         </a>
                         <button type="submit" name="action" value="unenroll" class="btn btn-warning">
