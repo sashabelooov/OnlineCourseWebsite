@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Enrollment</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            margin-bottom: 25px;
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #0062cc 0%, #0072ff 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 10px rgba(0, 114, 255, 0.25);
+        }
+        
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 114, 255, 0.35);
+            background: linear-gradient(135deg, #0055b8 0%, #0066e0 100%);
+        }
+        
+        .back-btn i {
+            margin-right: 8px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 35px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 6px;
+            background: linear-gradient(90deg, #0072ff, #00c2ff);
+        }
+        
+        .card-icon {
+            width: 90px;
+            height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 15px auto 25px;
+            background: linear-gradient(135deg, #0072ff 0%, #00c2ff 100%);
+            border-radius: 50%;
+            color: white;
+            font-size: 40px;
+            box-shadow: 0 8px 20px rgba(0, 114, 255, 0.3);
+        }
+        
+        .card-title {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            color: #1a2b3c;
+        }
+        
+        .card-message {
+            color: #657786;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            font-size: 17px;
+        }
+        
+        .card-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 10px;
+        }
+        
+        .btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #0072ff 0%, #00c2ff 100%);
+            color: white;
+            box-shadow: 0 6px 15px rgba(0, 114, 255, 0.3);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0, 114, 255, 0.4);
+            background: linear-gradient(135deg, #0062e0 0%, #00b2e8 100%);
+        }
+        
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #6c757d;
+            border: 2px solid #e2e8f0;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #e9ecef;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff8e8e 100%);
+            color: white;
+            box-shadow: 0 6px 15px rgba(255, 107, 107, 0.3);
+        }
+        
+        .btn-warning:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(255, 107, 107, 0.4);
+            background: linear-gradient(135deg, #f55 0%, #ff7b7b 100%);
+        }
+        
+        .enrollment-status {
+            padding: 12px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+        
+        .status-enrolled {
+            color: #28a745;
+            background-color: rgba(40, 167, 69, 0.1);
+        }
+        
+        .status-not-enrolled {
+            color: #0072ff;
+            background-color: rgba(0, 114, 255, 0.1);
+        }
+        
+        .course-title {
+            font-weight: 700;
+            color: #1a2b3c;
+        }
+        
+        @media (max-width: 576px) {
+            .card {
+                padding: 25px 20px;
+            }
+            
+            .card-buttons {
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .btn {
+                width: 100%;
+                padding: 12px 20px;
+            }
+            
+            .back-btn {
+                margin-bottom: 20px;
+                padding: 8px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{% url 'profile' %}" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Back to Dashboard
+        </a>
+        
+        <div class="card">
+            <div class="card-icon">
+                {% if is_enrolled %}
+                    <i class="fas fa-check-circle"></i>
+                {% else %}
+                    <i class="fas fa-graduation-cap"></i>
+                {% endif %}
+            </div>
+            
+            <h2 class="card-title">
+                {% if is_enrolled %}
+                    Enrollment Confirmed
+                {% else %}
+                    Course Enrollment
+                {% endif %}
+            </h2>
+            
+            <div class="enrollment-status {% if is_enrolled %}status-enrolled{% else %}status-not-enrolled{% endif %}">
+                {% if is_enrolled %}
+                    You are currently enrolled in <span class="course-title">"{{ course.title }}"</span>
+                {% else %}
+                    Confirm enrollment in <span class="course-title">"{{ course.title }}"</span>
+                {% endif %}
+            </div>
+            
+            <p class="card-message">
+                {% if is_enrolled %}
+                    You have successfully enrolled in this course. You can continue your learning journey or return to your dashboard.
+                {% else %}
+                    By enrolling in this course, you'll gain access to all learning materials, assignments, and resources.
+                {% endif %}
+            </p>
+            
+            <form method="post">
+                {% csrf_token %}
+                <div class="card-buttons">
+                    {% if is_enrolled %}
+                        <a href="#" class="btn btn-primary">
+                            <i class="fas fa-play-circle"></i> Continue Learning
+                        </a>
+                        <button type="submit" name="action" value="unenroll" class="btn btn-warning">
+                            <i class="fas fa-user-times"></i> Unenroll
+                        </button>
+                    {% else %}
+                        <button type="submit" name="action" value="enroll" class="btn btn-primary">
+                            <i class="fas fa-check-circle"></i> Enroll Now
+                        </button>
+                    {% endif %}
+                    
+                    <!-- <a href="{% url 'profile' %}" class="btn btn-secondary">
+                        <i class="fas fa-times"></i> Cancel
+                    </a> -->
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

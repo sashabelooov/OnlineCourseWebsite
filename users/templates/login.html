@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login to Your Account</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 1rem;
+        }
+        
+        .login-container {
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 28rem;
+            padding: 2.5rem;
+            transition: all 0.3s ease;
+        }
+        
+        .login-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+        
+        .login-header h2 {
+            color: #1e293b;
+            font-weight: 700;
+            font-size: 1.75rem;
+            line-height: 2.25rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .login-header p {
+            color: #64748b;
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+        }
+        
+        .input-group {
+            margin-bottom: 1.25rem;
+            position: relative;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            font-size: 0.9375rem;
+            transition: all 0.2s;
+            background-color: #f8fafc;
+        }
+        
+        .input-group input:focus {
+            border-color: #7c3aed;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+            background-color: white;
+        }
+        
+        .input-group i {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #94a3b8;
+            font-size: 1rem;
+        }
+        
+        .remember-forgot {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            font-size: 0.875rem;
+        }
+        
+        .remember-forgot label {
+            display: flex;
+            align-items: center;
+            color: #475569;
+            cursor: pointer;
+        }
+        
+        .remember-forgot input {
+            margin-right: 0.5rem;
+            accent-color: #7c3aed;
+        }
+        
+        .remember-forgot a {
+            color: #2575fc;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .remember-forgot a:hover {
+            text-decoration: underline;
+        }
+        
+        .btn-login {
+            width: 100%;
+            padding: 0.875rem;
+            background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+            border: none;
+            border-radius: 0.5rem;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-login:hover {
+            background: linear-gradient(90deg, #5a0cb3 0%, #1a65e8 100%);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+        }
+        
+        .divider {
+            text-align: center;
+            margin: 1.5rem 0;
+            position: relative;
+        }
+        
+        .divider:before {
+            content: "";
+            position: absolute;
+            left: 0;
+            top: 50%;
+            width: 100%;
+            height: 1px;
+            background-color: #e2e8f0;
+        }
+        
+        .divider span {
+            background-color: white;
+            position: relative;
+            padding: 0 1rem;
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+        
+        .btn-google {
+            width: 100%;
+            padding: 0.75rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 0.5rem;
+            background-color: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            font-size: 0.9375rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .btn-google:hover {
+            background-color: #f8fafc;
+            border-color: #cbd5e1;
+        }
+        
+        .google-icon {
+            color: #DB4437;
+            font-size: 1.125rem;
+        }
+        
+        .register-link {
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+        
+        .register-link a {
+            color: #2575fc;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .register-link a:hover {
+            text-decoration: underline;
+        }
+        
+        .input-group.error input {
+            border-color: #ef4444;
+        }
+        
+        .error-message {
+            color: #ef4444;
+            font-size: 0.75rem;
+            margin-top: 0.25rem;
+            display: none;
+        }
+        
+        .alert {
+            padding: 0.75rem 1rem;
+            border-radius: 0.5rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            font-size: 0.875rem;
+        }
+        
+        .alert-error {
+            background-color: #fee2e2;
+            color: #b91c1c;
+            border: 1px solid #fecaca;
+        }
+        
+        .alert-success {
+            background-color: #dcfce7;
+            color: #166534;
+            border: 1px solid #bbf7d0;
+        }
+        
+        .alert i {
+            margin-right: 0.625rem;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 640px) {
+            .login-container {
+                padding: 1.5rem;
+            }
+            
+            .login-header h2 {
+                font-size: 1.5rem;
+            }
+            
+            .btn-login, .btn-google {
+                padding: 0.75rem;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .remember-forgot {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.75rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="login-header">
+            <h2>Welcome Back</h2>
+            <p>Sign in to continue to your account</p>
+        </div>
+        
+        <!-- Display Django messages -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert {% if message.tags == 'error' %}alert-error{% else %}alert-success{% endif %}">
+                    <i class="fas {% if message.tags == 'error' %}fa-exclamation-circle{% else %}fa-check-circle{% endif %}"></i>
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            
+            <div class="input-group {% if form.username.errors %}error{% endif %}">
+                {{ form.username }}
+                <i class="fas fa-envelope"></i>
+                {% if form.username.errors %}
+                    <div class="error-message" style="display: block;">
+                        {% for error in form.username.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="input-group {% if form.password.errors %}error{% endif %}">
+                {{ form.password }}
+                <i class="fas fa-eye-slash cursor-pointer toggle-password" onclick="togglePasswordVisibility()"></i>
+                {% if form.password.errors %}
+                    <div class="error-message" style="display: block;">
+                        {% for error in form.password.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+            
+            <div class="remember-forgot">
+                <label>
+                    <input type="checkbox" name="remember_me"> Remember me
+                </label>
+                <a href="#">Forgot password?</a>
+            </div>
+            
+            <button type="submit" class="btn-login">Sign In</button>
+        </form>
+        
+        <div class="divider">
+            <span>Or continue with</span>
+        </div>
+        
+        <button class="btn-google">
+            <i class="fab fa-google google-icon"></i>
+            Continue with Google
+        </button>
+        
+        <div class="register-link">
+            Don't have an account? <a href="{% url 'register' %}">Register</a>
+        </div>
+    </div>
+
+    <script>
+        // Add placeholders to Django form fields
+        document.addEventListener('DOMContentLoaded', function() {
+            const emailField = document.getElementById('{{ form.username.id_for_label }}');
+            if (emailField) {
+                emailField.placeholder = 'Email Address';
+                emailField.className = '';
+                emailField.classList.add('focus:ring-2', 'focus:ring-purple-600');
+            }
+            
+            const passwordField = document.getElementById('{{ form.password.id_for_label }}');
+            if (passwordField) {
+                passwordField.placeholder = 'Password';
+                passwordField.className = '';
+                passwordField.classList.add('focus:ring-2', 'focus:ring-purple-600');
+            }
+        });
+
+        function togglePasswordVisibility() {
+            const passwordField = document.getElementById('{{ form.password.id_for_label }}');
+            const toggleIcon = document.querySelector('.toggle-password');
+            
+            if (passwordField.type === 'password') {
+                passwordField.type = 'text';
+                toggleIcon.classList.remove('fa-eye-slash');
+                toggleIcon.classList.add('fa-eye');
+            } else {
+                passwordField.type = 'password';
+                toggleIcon.classList.remove('fa-eye');
+                toggleIcon.classList.add('fa-eye-slash');
+            }
+        }
+    </script>
+</body>
+</html>

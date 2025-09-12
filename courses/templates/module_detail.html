@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ module.title }}</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container py-4">
+    <h2>{{ module.title }}</h2>
+    <p>{{ module.description }}</p>
+
+    <h4 class="mt-4">Mavzular</h4>
+    <ul class="list-group mb-4">
+        {% for topic in topics %}
+        <li class="list-group-item">{{ topic.title }}</li>
+        {% empty %}
+        <li class="list-group-item text-muted">Mavzular yo‘q</li>
+        {% endfor %}
+    </ul>
+
+    <h4 class="mt-4">Videolar</h4>
+    <div class="row">
+        {% for video in videos %}
+        <div class="col-md-4 mb-3">
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{{ video.title }}</h5>
+                    <p class="card-text">Davomiyligi: {{ video.duration|default:"-" }}</p>
+                    <a href="{% url 'video_detail' video.pk %}" class="btn btn-primary btn-sm">Ko‘rish</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-muted">Videolar yo‘q</p>
+        {% endfor %}
+    </div>
+</div>
+</body>
+</html>

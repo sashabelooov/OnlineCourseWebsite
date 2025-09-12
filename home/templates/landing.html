@@ -1,0 +1,1513 @@
+
+{% load static %}
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EduLearn - Online Courses Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="https://unpkg.com/feather-icons"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+    <style>
+        /* Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    color: #333;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+section {
+    padding: 80px 0;
+}
+
+h1, h2, h3, h4 {
+    margin-bottom: 20px;
+    font-weight: 700;
+}
+
+p {
+    margin-bottom: 15px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 12px 30px;
+    border-radius: 50px;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    cursor: pointer;
+}
+
+.btn-primary {
+    background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+    color: white;
+    border: none;
+}
+
+.btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+}
+
+.btn-small {
+    padding: 8px 20px;
+    font-size: 14px;
+}
+
+.section-title {
+    text-align: center;
+    margin-bottom: 60px;
+}
+
+.section-title h2 {
+    font-size: 36px;
+    position: relative;
+    display: inline-block;
+    padding-bottom: 15px;
+}
+
+.section-title h2::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 70px;
+    height: 3px;
+    background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+}
+
+/* Navbar Styles - UPDATED */
+.navbar {
+    background-color: white;
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.navbar .container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+}
+
+.logo-icon {
+    font-size: 28px;
+    margin-right: 10px;
+    background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.logo h1 {
+    font-size: 24px;
+    margin: 0;
+    background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    align-items: center;
+}
+
+.nav-links li {
+    margin: 0 10px;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #333;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.nav-links a:hover {
+    color: #6a11cb;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-btn {
+    background: transparent;
+    border: 2px solid #6a11cb;
+    color: #6a11cb;
+    padding: 8px 20px;
+    border-radius: 50px;
+    font-weight: 600;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.dropdown-btn:hover {
+    background: #6a11cb;
+    color: white;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: white;
+    min-width: 120px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+    border-radius: 10px;
+    overflow: hidden;
+    right: 0;
+}
+
+.dropdown-content a {
+    padding: 10px 15px;
+    display: block;
+    color: #333;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.dropdown-content a:hover {
+    background: #f5f5f5;
+    color: #6a11cb;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.auth-buttons {
+    display: flex;
+    align-items: center;
+}
+
+.auth-buttons .btn {
+    margin-left: 10px;
+    padding: 8px 20px;
+}
+
+.btn-outline {
+    background: transparent;
+    border: 2px solid #6a11cb;
+    color: #6a11cb;
+}
+
+.btn-outline:hover {
+    background: #6a11cb;
+    color: white;
+}
+
+/* Mobile Menu */
+.mobile-menu-btn {
+    display: none;
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: #6a11cb;
+}
+
+/* Hero Section */
+.hero {
+    padding: 120px 0;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    text-align: center;
+}
+
+.hero-content {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.hero h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+    background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.hero p {
+    font-size: 20px;
+    color: #555;
+    margin-bottom: 30px;
+}
+
+.logo-animation {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 30px;
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: pulse 2s infinite;
+}
+
+.logo-animation i {
+    font-size: 60px;
+    color: white;
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(106, 17, 203, 0.7);
+    }
+    70% {
+        transform: scale(1);
+        box-shadow: 0 0 0 20px rgba(106, 17, 203, 0);
+    }
+    100% {
+        transform: scale(0.95);
+        box-shadow: 0 0 0 0 rgba(106, 17, 203, 0);
+    }
+}
+
+/* Courses Section */
+.courses {
+    background: linear-gradient(to bottom, #ffffff, #f9f9ff);
+}
+
+.course-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.course-card {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+}
+
+.course-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.course-img {
+    height: 200px;
+    overflow: hidden;
+}
+
+.course-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.course-content {
+    padding: 20px;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.course-content h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.course-info {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 15px;
+    color: #777;
+    font-size: 14px;
+}
+
+.rating {
+    color: #ffc107;
+    margin-bottom: 15px;
+}
+
+.course-footer {
+    margin-top: auto;
+    padding-top: 15px;
+    text-align: center;
+}
+
+/* Teachers Section */
+.teachers {
+    background: linear-gradient(to bottom, #f9f9ff, #ffffff);
+}
+
+.teacher-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+}
+
+.teacher-card {
+    background: white;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-align: center;
+}
+
+.teacher-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+}
+
+.teacher-img {
+    height: 250px;
+    overflow: hidden;
+}
+
+.teacher-img img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.teacher-content {
+    padding: 20px;
+}
+
+.teacher-content h3 {
+    font-size: 22px;
+    margin-bottom: 5px;
+}
+
+.teacher-content .subject {
+    color: #6a11cb;
+    font-weight: 500;
+    margin-bottom: 15px;
+}
+
+.teacher-stats {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+    border-top: 1px solid #eee;
+    padding-top: 15px;
+}
+
+.stat {
+    text-align: center;
+}
+
+.stat .number {
+    font-size: 18px;
+    font-weight: 700;
+    color: #6a11cb;
+}
+
+.stat .label {
+    font-size: 12px;
+    color: #777;
+}
+
+/* About Section - UPDATED with Charts */
+.about {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+}
+
+.analytics {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 30px;
+    margin-bottom: 60px;
+}
+
+.analytic-card {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.analytic-card i {
+    font-size: 40px;
+    margin-bottom: 15px;
+    background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.analytic-card .number {
+    font-size: 36px;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #6a11cb;
+}
+
+.analytic-card .label {
+    color: #777;
+    font-size: 16px;
+}
+
+/* Chart Styles */
+.charts-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    margin-bottom: 60px;
+}
+
+.chart-card {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    text-align: center;
+}
+
+.chart-card h3 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: #6a11cb;
+}
+
+.chart {
+    height: 200px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    padding: 0 10px;
+}
+
+.bar {
+    width: 40px;
+    background: linear-gradient(to top, #6a11cb, #2575fc);
+    border-radius: 5px 5px 0 0;
+    position: relative;
+    transition: height 0.5s ease;
+}
+
+.bar-label {
+    position: absolute;
+    bottom: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    color: #777;
+}
+
+.bar-value {
+    position: absolute;
+    top: -25px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 12px;
+    font-weight: 600;
+    color: #6a11cb;
+}
+
+.pie-chart {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background: conic-gradient(
+        #6a11cb 0% 30%,
+        #2575fc 30% 60%,
+        #8A2BE2 60% 80%,
+        #5C6BC0 80% 100%
+    );
+    margin: 0 auto;
+    position: relative;
+}
+
+.pie-center {
+    position: absolute;
+    width: 90px;
+    height: 90px;
+    background: white;
+    border-radius: 50%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.pie-legend {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 10px;
+}
+
+.legend-item {
+    display: flex;
+    align-items: center;
+    margin-right: 15px;
+    font-size: 12px;
+}
+
+.legend-color {
+    width: 15px;
+    height: 15px;
+    border-radius: 3px;
+    margin-right: 5px;
+}
+
+.line-chart-container {
+    height: 200px;
+    position: relative;
+    margin: 0 auto;
+    width: 90%;
+}
+
+.line-chart {
+    position: relative;
+    height: 100%;
+}
+
+.line-chart-grid {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    grid-template-rows: repeat(5, 1fr);
+}
+
+.line-chart-grid > div {
+    border-right: 1px solid #eee;
+    border-top: 1px solid #eee;
+}
+
+.line-chart-path {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 80%;
+    padding: 0 10%;
+}
+
+.line-chart-path svg {
+    width: 100%;
+    height: 100%;
+}
+
+.line-chart-labels {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 10%;
+    margin-top: 10px;
+}
+
+.line-chart-labels span {
+    font-size: 12px;
+    color: #777;
+}
+
+.reviews {
+    margin-top: 60px;
+}
+
+.review-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 30px;
+}
+
+.review-card {
+    background: white;
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    flex: 1;
+}
+
+.review-header {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.review-avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+}
+
+.review-avatar i {
+    font-size: 30px;
+    color: white;
+}
+
+.review-info h4 {
+    margin-bottom: 5px;
+}
+
+.review-rating {
+    color: #ffc107;
+}
+
+/* Contact Section */
+.contact {
+    background: linear-gradient(to bottom, #ffffff, #f9f9ff);
+}
+
+.contact-form {
+    background: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 5px 30px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.form-control:focus {
+    border-color: #6a11cb;
+    outline: none;
+}
+
+select.form-control {
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    background-size: 16px;
+}
+
+.submit-btn {
+    text-align: center;
+    margin-top: 30px;
+}
+
+/* Footer */
+.footer {
+    background: white;
+    padding: 60px 0 30px;
+    box-shadow: 0 -2px 15px rgba(0, 0, 0, 0.05);
+}
+
+.footer-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 40px;
+    margin-bottom: 40px;
+}
+
+.footer-column h3 {
+    font-size: 20px;
+    margin-bottom: 20px;
+    position: relative;
+    padding-bottom: 10px;
+}
+
+.footer-column h3::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 40px;
+    height: 2px;
+    background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
+}
+
+.footer-links {
+    list-style: none;
+}
+
+.footer-links li {
+    margin-bottom: 12px;
+}
+
+.footer-links a {
+    text-decoration: none;
+    color: #555;
+    transition: color 0.3s ease;
+}
+
+.footer-links a:hover {
+    color: #6a11cb;
+}
+
+.social-links {
+    display: flex;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.social-links a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+    color: white;
+    text-decoration: none;
+    transition: transform 0.3s ease;
+}
+
+.social-links a:hover {
+    transform: translateY(-3px);
+}
+
+.footer-bottom {
+    text-align: center;
+    padding-top: 30px;
+    border-top: 1px solid #eee;
+    color: #777;
+}
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+    .nav-links {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        margin-top: 20px;
+    }
+    
+    .nav-links.show {
+        display: flex;
+    }
+    
+    .nav-links li {
+        margin: 10px 0;
+    }
+    
+    .mobile-menu-btn {
+        display: block;
+    }
+    
+    .auth-buttons {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        margin-top: 20px;
+    }
+    
+    .auth-buttons.show {
+        display: flex;
+    }
+    
+    .auth-buttons .btn {
+        margin: 10px 0;
+        width: 100%;
+        text-align: center;
+    }
+    
+    .dropdown {
+        width: 100%;
+    }
+    
+    .dropdown-btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .dropdown-content {
+        width: 100%;
+    }
+    
+    .review-container {
+        flex-direction: column;
+    }
+    
+    .hero h1 {
+        font-size: 36px;
+    }
+    
+    .hero p {
+        font-size: 18px;
+    }
+    
+    .charts-container {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 768px) {
+    .section-title h2 {
+        font-size: 28px;
+    }
+    
+    .hero {
+        padding: 80px 0;
+    }
+    
+    .hero h1 {
+        font-size: 32px;
+    }
+    
+    .course-cards, .teacher-cards {
+        grid-template-columns: 1fr;
+    }
+}
+
+    </style>
+
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-graduation-cap logo-icon"></i>
+                <h1>EduLearn</h1>
+            </div>
+            
+            <button class="mobile-menu-btn" id="mobileMenuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#">HOME</a></li>
+                <li><a href="#">COURSES</a></li>
+                <li><a href="#">TEACHERS</a></li>
+                <li><a href="#">ABOUT</a></li>
+                <li><a href="#">CONTACT</a></li>
+            </ul>
+            
+            <div class="auth-buttons" id="authButtons">
+                <div class="dropdown">
+                    <button class="dropdown-btn">
+                        ENG <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="#">UZ</a>
+                        <a href="#">RU</a>
+                        <a href="#">ENG</a>
+                    </div>
+                </div>
+                <a href="{% url 'login' %}" class="btn btn-outline">LOGIN</a>
+                <a href="{% url 'register' %}" class="btn btn-primary">REGISTER</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="logo-animation">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <div class="hero-content">
+                <h1>Learn From The Best Online Courses</h1>
+                <p>Expand your career opportunities with our professional courses taught by industry experts from around the world.</p>
+                <a href="#" class="btn btn-primary">Explore Courses</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Courses Section -->
+    <section class="courses">
+        <div class="container">
+            <div class="section-title">
+                <h2>Popular Courses</h2>
+                <p>Discover our most popular courses among students</p>
+            </div>
+            
+            <div class="course-cards">
+                <div class="course-card">
+                    <div class="course-img">
+                        <img src="http://static.photos/technology/300x200/1" alt="Web Development">
+                    </div>
+                    <div class="course-content">
+                        <h3>Web Development Bootcamp</h3>
+                        <p>Learn to build modern web applications using HTML, CSS, JavaScript and React.</p>
+                        <div class="course-info">
+                            <span><i class="fas fa-clock"></i> 60 hours</span>
+                            <span><i class="fas fa-users"></i> 250 students</span>
+                        </div>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span>4.5 (120 reviews)</span>
+                        </div>
+                        <div class="course-footer">
+                            <a href="#" class="btn btn-primary btn-small">Enroll Now</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="course-card">
+                    <div class="course-img">
+                        <img src="http://static.photos/design/300x200/1" alt="UI/UX Design">
+                    </div>
+                    <div class="course-content">
+                        <h3>UI/UX Design Masterclass</h3>
+                        <p>Master the principles of user interface and experience design with practical projects.</p>
+                        <div class="course-info">
+                            <span><i class="fas fa-clock"></i> 45 hours</span>
+                            <span><i class="fas fa-users"></i> 180 students</span>
+                        </div>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span>4.9 (95 reviews)</span>
+                        </div>
+                        <div class="course-footer">
+                            <a href="#" class="btn btn-primary btn-small">Enroll Now</a>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="course-card">
+                    <div class="course-img">
+                        <img src="http://static.photos/science/300x200/1" alt="Data Science">
+                    </div>
+                    <div class="course-content">
+                        <h3>Data Science Fundamentals</h3>
+                        <p>Learn data analysis, visualization, and machine learning techniques with Python.</p>
+                        <div class="course-info">
+                            <span><i class="fas fa-clock"></i> 75 hours</span>
+                            <span><i class="fas fa-users"></i> 320 students</span>
+                        </div>
+                        <div class="rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <span>4.2 (150 reviews)</span>
+                        </div>
+                        <div class="course-footer">
+                            <a href="#" class="btn btn-primary btn-small">Enroll Now</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Teachers Section -->
+    <section class="teachers">
+        <div class="container">
+            <div class="section-title">
+                <h2>Our Expert Teachers</h2>
+                <p>Learn from industry professionals with years of experience</p>
+            </div>
+            
+            <div class="teacher-cards">
+                <div class="teacher-card">
+                    <div class="teacher-img">
+                        <img src="http://static.photos/people/300x250/1" alt="Michael Johnson">
+                    </div>
+                    <div class="teacher-content">
+                        <h3>Michael Johnson</h3>
+                        <p class="subject">Web Development</p>
+                        <p>10+ years of experience in full-stack development and teaching.</p>
+                        <div class="teacher-stats">
+                            <div class="stat">
+                                <div class="number">4.8</div>
+                                <div class="label">Rating</div>
+                            </div>
+                            <div class="stat">
+                                <div class="number">1.2k</div>
+                                <div class="label">Students</div>
+                            </div>
+                            <div class="stat">
+                                <div class="number">7</div>
+                                <div class="label">Courses</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="teacher-card">
+                    <div class="teacher-img">
+                        <img src="http://static.photos/people/300x250/2" alt="Sarah Williams">
+                    </div>
+                    <div class="teacher-content">
+                        <h3>Sarah Williams</h3>
+                        <p class="subject">UI/UX Design</p>
+                        <p>Former lead designer at TechCorp with 8 years of industry experience.</p>
+                        <div class="teacher-stats">
+                            <div class="stat">
+                                <div class="number">4.9</div>
+                                <div class="label">Rating</div>
+                            </div>
+                            <div class="stat">
+                                <div class="number">980</div>
+                                <div class="label">Students</div>
+                            </div>
+                            <div class="stat">
+                                <div class="number">5</div>
+                                <div class="label">Courses</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="teacher-card">
+                    <div class="teacher-img">
+                        <img src="http://static.photos/people/300x250/3" alt="Robert Chen">
+                    </div>
+                    <div class="teacher-content">
+                        <h3>Robert Chen</h3>
+                        <p class="subject">Data Science</p>
+                        <p>Data scientist with PhD in Machine Learning and 6 years of teaching experience.</p>
+                        <div class="teacher-stats">
+                            <div class="stat">
+                                <div class="number">4.7</div>
+                                <div class="label">Rating</div>
+                            </div>
+                            <div class="stat">
+                                <div class="number">1.5k</div>
+                                <div class="label">Students</div>
+                            </div>
+                            <div class="stat">
+                                <div class="number">6</div>
+                                <div class="label">Courses</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section - UPDATED with Charts -->
+    <section class="about">
+        <div class="container">
+            <div class="section-title">
+                <h2>About Us</h2>
+                <p>We are committed to providing high-quality education to everyone</p>
+            </div>
+            
+            <div class="analytics">
+                <div class="analytic-card">
+                    <i class="fas fa-users"></i>
+                    <div class="number">15,000+</div>
+                    <div class="label">Happy Students</div>
+                </div>
+                
+                <div class="analytic-card">
+                    <i class="fas fa-book-open"></i>
+                    <div class="number">250+</div>
+                    <div class="label">Courses Available</div>
+                </div>
+                
+                <div class="analytic-card">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <div class="number">120+</div>
+                    <div class="label">Expert Instructors</div>
+                </div>
+                
+                <div class="analytic-card">
+                    <i class="fas fa-award"></i>
+                    <div class="number">4.8/5</div>
+                    <div class="label">Average Rating</div>
+                </div>
+            </div>
+            
+            <!-- Charts Section -->
+            <div class="charts-container">
+                <div class="chart-card">
+                    <h3>Student Enrollment by Course</h3>
+                    <div class="chart">
+                        <div class="bar" style="height: 70%;">
+                            <span class="bar-value">700</span>
+                            <span class="bar-label">Web Dev</span>
+                        </div>
+                        <div class="bar" style="height: 50%;">
+                            <span class="bar-value">500</span>
+                            <span class="bar-label">UI/UX</span>
+                        </div>
+                        <div class="bar" style="height: 85%;">
+                            <span class="bar-value">850</span>
+                            <span class="bar-label">Data Sci</span>
+                        </div>
+                        <div class="bar" style="height: 40%;">
+                            <span class="bar-value">400</span>
+                            <span class="bar-label">Marketing</span>
+                        </div>
+                        <div class="bar" style="height: 60%;">
+                            <span class="bar-value">600</span>
+                            <span class="bar-label">Mobile</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chart-card">
+                    <h3>Course Categories</h3>
+                    <div class="pie-chart">
+                        <div class="pie-center"></div>
+                    </div>
+                    <div class="pie-legend">
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #6a11cb;"></div>
+                            <span>Technology</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #2575fc;"></div>
+                            <span>Business</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #8A2BE2;"></div>
+                            <span>Design</span>
+                        </div>
+                        <div class="legend-item">
+                            <div class="legend-color" style="background-color: #5C6BC0;"></div>
+                            <span>Languages</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="chart-card">
+                    <h3>Student Growth Over Time</h3>
+                    <div class="line-chart-container">
+                        <div class="line-chart">
+                            <div class="line-chart-grid">
+                                <div></div><div></div><div></div><div></div><div></div>
+                                <div></div><div></div><div></div><div></div><div></div>
+                                <div></div><div></div><div></div><div></div><div></div>
+                                <div></div><div></div><div></div><div></div><div></div>
+                                <div></div><div></div><div></div><div></div><div></div>
+                            </div>
+                            <div class="line-chart-path">
+                                <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+                                    <path d="M0,80 C20,60 40,40 60,20 C70,10 80,5 100,0" stroke="#6a11cb" stroke-width="2" fill="none" />
+                                    <circle cx="0" cy="80" r="3" fill="#6a11cb" />
+                                    <circle cx="20" cy="60" r="3" fill="#6a11cb" />
+                                    <circle cx="40" cy="40" r="3" fill="#6a11cb" />
+                                    <circle cx="60" cy="20" r="3" fill="#6a11cb" />
+                                    <circle cx="80" cy="5" r="3" fill="#6a11cb" />
+                                    <circle cx="100" cy="0" r="3" fill="#6a11cb" />
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="line-chart-labels">
+                            <span>2018</span>
+                            <span>2019</span>
+                            <span>2020</span>
+                            <span>2021</span>
+                            <span>2022</span>
+                            <span>2023</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="reviews">
+                <div class="section-title">
+                    <h2>Student Reviews</h2>
+                    <p>What our students say about our courses</p>
+                </div>
+                
+                <div class="review-container">
+                    <div class="review-card">
+                        <div class="review-header">
+                            <div class="review-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="review-info">
+                                <h4>Alex Morgan</h4>
+                                <div class="review-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p>"The Web Development Bootcamp completely transformed my career. The instructors are amazing and the curriculum is up-to-date with industry standards."</p>
+                    </div>
+                    
+                    <div class="review-card">
+                        <div class="review-header">
+                            <div class="review-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="review-info">
+                                <h4>Jessica Lee</h4>
+                                <div class="review-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p>"I've taken several UI/UX courses, but this one stands out. The projects were challenging and practical. I landed a job right after completing the course!"</p>
+                    </div>
+                    
+                    <div class="review-card">
+                        <div class="review-header">
+                            <div class="review-avatar">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="review-info">
+                                <h4>David Kim</h4>
+                                <div class="review-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                </div>
+                            </div>
+                        </div>
+                        <p>"The Data Science course was comprehensive and well-structured. The instructors provided excellent support throughout the learning journey."</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact">
+        <div class="container">
+            <div class="section-title">
+                <h2>Contact Us</h2>
+                <p>Get in touch with us for more information</p>
+            </div>
+            
+            <div class="contact-form">
+                <form id="contactForm">
+                    <div class="form-group">
+                        <label for="name">Full Name</label>
+                        <input type="text" id="name" class="form-control" placeholder="Your Name" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" class="form-control" placeholder="Your Email" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="phone">Phone Number</label>
+                        <input type="tel" id="phone" class="form-control" placeholder="Your Phone Number" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="course">Select Course</label>
+                        <select id="course" class="form-control" required>
+                            <option value="" disabled selected>Choose a course</option>
+                            <option value="web-development">Web Development Bootcamp</option>
+                            <option value="ui-ux">UI/UX Design Masterclass</option>
+                            <option value="data-science">Data Science Fundamentals</option>
+                            <option value="digital-marketing">Digital Marketing Strategy</option>
+                            <option value="mobile-dev">Mobile App Development</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" class="form-control" rows="5" placeholder="Your Message" required></textarea>
+                    </div>
+                    
+                    <div class="submit-btn">
+                        <button type="submit" class="btn btn-primary">Send Message</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>EduLearn</h3>
+                    <p>Providing high-quality online education to help you advance your career and achieve your goals.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Quick Links</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Home</a></li>
+                        <li><a href="#">Courses</a></li>
+                        <li><a href="#">Teachers</a></li>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Popular Courses</h3>
+                    <ul class="footer-links">
+                        <li><a href="#">Web Development</a></li>
+                        <li><a href="#">UI/UX Design</a></li>
+                        <li><a href="#">Data Science</a></li>
+                        <li><a href="#">Digital Marketing</a></li>
+                        <li><a href="#">Mobile Development</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-column">
+                    <h3>Contact Info</h3>
+                    <ul class="footer-links">
+                        <li><i class="fas fa-map-marker-alt"></i> 123 Education St, Learning City</li>
+                        <li><i class="fas fa-phone"></i> +1 234 567 8900</li>
+                        <li><i class="fas fa-envelope"></i> info@edulearn.com</li>
+                        <li><i class="fas fa-clock"></i> Mon-Fri: 9:00 AM - 6:00 PM</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2023 EduLearn. All Rights Reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    
+        <script>
+                // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const navLinks = document.getElementById('navLinks');
+        const authButtons = document.getElementById('authButtons');
+
+        mobileMenuBtn.addEventListener('click', function() {
+            navLinks.classList.toggle('show');
+            authButtons.classList.toggle('show');
+            this.querySelector('i').classList.toggle('fa-bars');
+            this.querySelector('i').classList.toggle('fa-times');
+        });
+
+        // Simple form validation
+        document.getElementById('contactForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Get form values
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const course = document.getElementById('course').value;
+            const message = document.getElementById('message').value;
+            
+            // Simple validation
+            if (name && email && phone && course && message) {
+                // In a real application, you would send this data to a server
+                alert('Thank you for your message! We will contact you soon.');
+                this.reset();
+            } else {
+                alert('Please fill all fields.');
+            }
+        });
+
+        // Animation for elements when they come into view
+        function animateOnScroll() {
+            const elements = document.querySelectorAll('.course-card, .teacher-card, .analytic-card, .review-card, .chart-card');
+            
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const screenPosition = window.innerHeight / 1.3;
+                
+                if (elementPosition < screenPosition) {
+                    element.style.opacity = 1;
+                    element.style.transform = 'translateY(0)';
+                }
+            });
+        }
+
+        // Set initial state for animation
+        document.querySelectorAll('.course-card, .teacher-card, .analytic-card, .review-card, .chart-card').forEach(element => {
+            element.style.opacity = 0;
+            element.style.transform = 'translateY(50px)';
+            element.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        });
+
+        // Animate bar charts
+        function animateBars() {
+            const bars = document.querySelectorAll('.bar');
+            bars.forEach(bar => {
+                const height = bar.style.height;
+                bar.style.height = '0%';
+                setTimeout(() => {
+                    bar.style.height = height;
+                }, 300);
+            });
+        }
+
+        // Listen for scroll events
+        window.addEventListener('scroll', animateOnScroll);
+        // Initial check
+        window.addEventListener('load', function() {
+            animateOnScroll();
+            animateBars();
+            AOS.init();
+            feather.replace();
+        });
+
+        </script>
+
+</body>
+</html>

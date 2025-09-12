@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Profilni yangilash</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f5f5;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 800px;
+            overflow: hidden;
+            border: 1px solid #eaeaea;
+        }
+        
+        .header {
+            background-color: #6a11cb;
+            color: white;
+            padding: 25px 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-weight: 600;
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+        
+        .header p {
+            opacity: 0.9;
+        }
+        
+        .profile-content {
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        .profile-picture {
+            text-align: center;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 10px;
+            margin: 0 auto;
+            max-width: 400px;
+        }
+        
+        .image-container {
+            width: 180px;
+            height: 180px;
+            border-radius: 50%;
+            overflow: hidden;
+            margin: 0 auto 20px;
+            border: 5px solid #e6e6e6;
+            position: relative;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        .image-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .image-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(106, 17, 203, 0.85);
+            padding: 10px;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+            cursor: pointer;
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .image-container:hover .image-overlay {
+            transform: translateY(0);
+        }
+        
+        .change-photo-btn {
+            font-size: 24px;
+        }
+        
+        .upload-instruction {
+            color: #666;
+            font-size: 14px;
+            margin-top: 15px;
+            line-height: 1.5;
+        }
+        
+        .profile-info {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 10px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #444;
+            font-size: 15px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 14px 14px 14px 45px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+            transition: border 0.3s, box-shadow 0.3s;
+        }
+        
+        .form-control:focus {
+            border-color: #6a11cb;
+            box-shadow: 0 0 0 3px rgba(106, 17, 203, 0.2);
+            outline: none;
+        }
+        
+        .input-icon {
+            position: absolute;
+            left: 15px;
+            top: 40px;
+            color: #6a11cb;
+            font-size: 18px;
+        }
+        
+        .btn {
+            padding: 14px 20px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: #6a11cb;
+            color: white;
+            width: 100%;
+        }
+        
+        .btn-primary:hover {
+            background: #2575fc;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(106, 17, 203, 0.3);
+        }
+        
+        .btn-reset {
+            background-color: #f8f9fa;
+            color: #6c757d;
+            border: 1px solid #ddd;
+            margin-top: 10px;
+        }
+        
+        .btn-reset:hover {
+            background-color: #e9ecef;
+        }
+        
+        .form-footer {
+            margin-top: 25px;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .btn-back {
+            background: #6a11cb;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            font-weight: 500;
+        }
+        
+        .btn-back:hover {
+            background: #2575fc;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            background: #6a11cb;
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transform: translateX(100vw);
+            transition: transform 0.4s ease;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .errorlist {
+            list-style: none;
+            color: #dc3545;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        
+        .form-control.error {
+            border-color: #dc3545;
+        }
+        
+        .input-hint {
+            font-size: 13px;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        @media (min-width: 768px) {
+            .profile-content {
+                flex-direction: row;
+            }
+            
+            .profile-picture {
+                flex: 1;
+                max-width: 300px;
+            }
+            
+            .profile-info {
+                flex: 2;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .header {
+                padding: 15px 20px;
+            }
+            
+            .header h1 {
+                font-size: 22px;
+            }
+            
+            .profile-content {
+                padding: 20px;
+            }
+            
+            .image-container {
+                width: 150px;
+                height: 150px;
+            }
+            
+            .form-footer {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-user-edit"></i> Profilni yangilash</h1>
+            <p>Shaxsiy ma'lumotlaringizni yangilang</p>
+        </div>
+        
+        <form method="post" enctype="multipart/form-data" id="profileForm">
+            {% csrf_token %}
+            <div class="profile-content">
+                <!-- Left Column - Profile Picture -->
+                <div class="profile-picture">
+                    <div class="image-container">
+                        {% if form.instance.profile_image %}
+                            <img src="{{ form.instance.profile_image.url }}" alt="Profile Picture" id="profileImage">
+                        {% else %}
+                            <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80" alt="Profile Picture" id="profileImage">
+                        {% endif %}
+                        <div class="image-overlay">
+                            <span class="change-photo-btn"><i class="fas fa-camera"></i></span>
+                        </div>
+                    </div>
+                    <p class="upload-instruction">Profil uchun o'zingizning aniq rasmingizni yuklang. Maksimal hajm 2MB. JPG, PNG yoki GIF formatlarida.</p>
+                    {{ form.profile_image }}
+                </div>
+                
+                <!-- Right Column - Form Fields -->
+                <div class="profile-info">
+                    <div class="section-title">Shaxsiy ma'lumotlar</div>
+                    
+                    <!-- Email faqat ko‘rsatish uchun -->
+                    <div class="form-group">
+                        <label><i class="fas fa-envelope"></i> Email</label>
+                        <div class="input-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <input type="text" value="{{ request.user.email }}" class="form-control" readonly>
+                        <div class="input-hint">Bu faqat ko‘rish uchun, o‘zgartirib bo‘lmaydi</div>
+                    </div>
+
+                    <!-- Username field -->
+                    <div class="form-group">
+                        <label for="{{ form.username.id_for_label }}"><i class="fas fa-user"></i> Foydalanuvchi nomi</label>
+                        <div class="input-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        {{ form.username }}
+                        {% if form.username.errors %}
+                            <div class="errorlist">
+                                {% for error in form.username.errors %}
+                                    <div>{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                        <div class="input-hint">Bu boshqa foydalanuvchilar ko‘radi</div>
+                    </div>
+
+                    <!-- Phone field -->
+                    <div class="form-group">
+                        <label for="{{ form.phone.id_for_label }}"><i class="fas fa-phone"></i> Telefon raqami</label>
+                        <div class="input-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        {{ form.phone }}
+                        {% if form.phone.errors %}
+                            <div class="errorlist">
+                                {% for error in form.phone.errors %}
+                                    <div>{{ error }}</div>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Profilni yangilash</button>
+                    <button type="button" class="btn btn-reset" id="resetBtn"><i class="fas fa-undo"></i> O'zgarishlarni bekor qilish</button>
+                    
+                    <div class="form-footer">
+                        <a href="{% url 'profile' %}" class="btn-back"><i class="fas fa-arrow-left"></i> Profilga qaytish</a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i> Profilingiz muvaffaqiyatli yangilandi!
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Image upload functionality
+            const imageUpload = document.getElementById('{{ form.profile_image.id_for_label }}');
+            const profileImage = document.getElementById('profileImage');
+            const imageOverlay = document.querySelector('.image-overlay');
+            
+            // Hide the default file input and style it
+            if (imageUpload) {
+                imageUpload.style.display = 'none';
+                
+                imageOverlay.addEventListener('click', function() {
+                    imageUpload.click();
+                });
+                
+                imageUpload.addEventListener('change', function() {
+                    const file = this.files[0];
+                    if (file) {
+                        // Check file size (max 2MB)
+                        if (file.size > 2 * 1024 * 1024) {
+                            alert('Fayl hajmi 2MB dan oshmasligi kerak. Iltimos, kichikroq fayl tanlang.');
+                            this.value = '';
+                            return;
+                        }
+                        
+                        const reader = new FileReader();
+                        reader.onload = function(e) {
+                            profileImage.src = e.target.result;
+                        }
+                        reader.readAsDataURL(file);
+                    }
+                });
+            }
+            
+            // Form submission
+            const form = document.getElementById('profileForm');
+            const notification = document.getElementById('notification');
+            
+            if (form) {
+                form.addEventListener('submit', function(e) {
+                    // Client-side validation can be added here if needed
+                    
+                    // Show success notification
+                    notification.classList.add('show');
+                    
+                    // Hide notification after 3 seconds
+                    setTimeout(function() {
+                        notification.classList.remove('show');
+                    }, 3000);
+                });
+            }
+            
+            // Reset button functionality
+            const resetBtn = document.getElementById('resetBtn');
+            if (resetBtn) {
+                resetBtn.addEventListener('click', function() {
+                    // Reset form fields to their initial values
+                    form.reset();
+                    
+                    // Reset image to original
+                    {% if form.instance.profile_image %}
+                        profileImage.src = "{{ form.instance.profile_image.url }}";
+                    {% else %}
+                        profileImage.src = "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=80";
+                    {% endif %}
+                });
+            }
+
+            // Add classes to form inputs for styling
+            const inputs = document.querySelectorAll('input[type="text"], input[type="tel"]');
+            inputs.forEach(input => {
+                input.classList.add('form-control');
+            });
+        });
+    </script>
+</body>
+</html>
