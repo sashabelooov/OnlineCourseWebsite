@@ -181,7 +181,7 @@
             {% for module in modules %}
             <div class="col-lg-6 col-xl-4 mb-4">
                 <div class="module-card h-100" 
-                    onclick="window.location.href='{% url 'topic_list' module.course.pk %}'" 
+                    onclick="window.location.href='{% url 'topic_list_by_module' module.course.pk module.pk %}'" 
                     style="cursor: pointer;">
                     <div class="module-card-body">
                         <div class="d-flex align-items-center mb-3">

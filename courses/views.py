@@ -42,16 +42,29 @@ def continue_learning(request, pk):
     })
 
 
-@login_required
-def topic_list(request, pk):
-    course = get_object_or_404(Course, pk=pk)
-    topics = Topic.objects.filter(module__course=course)
 
-    # Foydalanuvchi enroll bo'lgan kursini tekshiramiz
+@login_required
+def topic_list(request, pk, module_id=None):
+    course = get_object_or_404(Course, pk=pk)
+    
+    # Get modules for the filter
+    modules = course.modules.all()
+    
+    # Get topics - filter by module if specified
+    if module_id:
+        active_module = get_object_or_404(Module, pk=module_id, course=course)
+        topics = Topic.objects.filter(module=active_module)
+    else:
+        active_module = None
+        topics = Topic.objects.filter(module__course=course)
+
+    # Check if user is enrolled
     enrollment = Enrollment.objects.filter(user=request.user, course=course).first()
 
     return render(request, "topic_list.html", {
         "course": course,
         "topics": topics,
+        "modules": modules,
+        "active_module": active_module,
         "enrollment": enrollment
     })
