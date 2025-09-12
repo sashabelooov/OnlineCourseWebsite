@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Course, Enrollment, Module, Topic
+from .models import Course, Enrollment, Module, Topic, Video
 from django.contrib import messages
 
 @login_required
@@ -66,5 +66,28 @@ def topic_list(request, pk, module_id=None):
         "topics": topics,
         "modules": modules,
         "active_module": active_module,
+        "enrollment": enrollment
+    })
+
+
+
+@login_required
+def topic_detail(request, pk, topic_id):
+    course = get_object_or_404(Course, pk=pk)
+    topic = get_object_or_404(Topic, pk=topic_id, module__course=course)
+    
+    # Get videos specifically for this topic's module
+    videos = Video.objects.filter(module=topic.module)
+    
+    # Check enrollment
+    enrollment = Enrollment.objects.filter(user=request.user, course=course).first()
+    if not enrollment:
+        messages.error(request, "Siz ushbu kursga yozilmagansiz.")
+        return redirect('enroll_course', pk=course.pk)
+
+    return render(request, "video.html", {
+        "course": course,
+        "topic": topic,
+        "videos": videos,
         "enrollment": enrollment
     })

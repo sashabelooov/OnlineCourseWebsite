@@ -26,6 +26,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "jazzmin", 
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -146,3 +147,37 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 
+JAZZMIN_SETTINGS = {
+    "site_title": "ItCourse Admin",
+    "site_header": "ItCourse Panel",
+    "site_brand": "ItCourse",
+    "welcome_sign": "Xush kelibsiz ItCourse Admin paneliga",
+    "copyright": "ItCourse",
+    "show_sidebar": True,
+    "navigation_expanded": True,
+    "topmenu_links": [
+        {"name": "Bosh sahifa", "url": "admin:index", "permissions": ["auth.view_user"]},
+        {"model": "auth.User"},
+        {"model": "yourapp.Course"},
+    ],
+    "icons": {
+        "auth.User": "fas fa-user",
+        "auth.Group": "fas fa-users",
+        "yourapp.Course": "fas fa-book",
+        "yourapp.Module": "fas fa-layer-group",
+        "yourapp.Video": "fas fa-video",
+    },
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "theme": "cosmo",           # bootstrap temasi (cosmo, litera, lumen va hok.)
+    "dark_mode_theme": "darkly",
+    "navbar": "navbar-dark navbar-primary",
+    "sidebar": "sidebar-dark-primary",
+    "brand_colour": "navbar-primary",
+    "accent": "accent-info",
+    "body_small_text": False,
+    "sidebar_fixed": True,
+    "navbar_fixed": True,
+    "footer_fixed": False,
+}

@@ -6,4 +6,6 @@ urlpatterns = [
     path('courses/<int:pk>/continue/', views.continue_learning, name='continue_learning'),
     path('courses/<int:pk>/topics/', views.topic_list, name='topic_list'),  # endi Course.pk bo‘yicha
     path('course/<int:pk>/module/<int:module_id>/topics/', views.topic_list, name='topic_list_by_module'),
+    path('course/<int:pk>/topic/<int:topic_id>/', views.topic_detail, name='topic_detail'),  # yangi
+
 ]

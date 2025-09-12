@@ -171,7 +171,7 @@
                             <p class="card-text text-muted small">{{ topic.description|default:"Tavsif mavjud emas" }}</p>
                         </div>
                         <div class="card-footer bg-transparent border-0 pt-0">
-                            <a href="#" class="btn btn-outline-primary w-100">
+                            <a href="{% url 'topic_detail' course.pk topic.id %}" class="btn btn-outline-primary w-100">
                                 <i class="fas fa-play-circle me-2"></i>Darsni ko'rish
                             </a>
                         </div>

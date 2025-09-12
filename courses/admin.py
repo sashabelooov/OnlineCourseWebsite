@@ -23,4 +23,4 @@ class TopicAdmin(admin.ModelAdmin):
 
 @admin.register(Video)
 class VideoAdmin(admin.ModelAdmin):
-    list_display = ('id', 'title', 'module')
+    list_display = ('title', 'module')

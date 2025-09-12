@@ -2,18 +2,262 @@
 <html lang="uz">
 <head>
     <meta charset="UTF-8">
-    <title>{{ video.title }}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ topic.title }} - {{ course.title }}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .sidebar {
+            height: calc(100vh - 56px);
+            position: sticky;
+            top: 56px;
+            overflow-y: auto;
+            background-color: #f1f3f5;
+            border-right: 1px solid #dee2e6;
+        }
+        .video-container {
+            background-color: #000;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        .topic-item.active {
+            background-color: #e9ecef;
+            font-weight: 600;
+            border-left: 4px solid #0d6efd;
+        }
+        .completed .bi-circle {
+            display: none;
+        }
+        .completed .bi-check-circle-fill {
+            display: inline-block;
+            color: #198754;
+        }
+        .bi-check-circle-fill {
+            display: none;
+        }
+        .progress {
+            height: 8px;
+        }
+    </style>
 </head>
 <body>
-<div class="container py-4">
-    <h2>{{ video.title }}</h2>
-    <p>Modul: {{ video.module.title }}</p>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="{% url 'continue_learning' pk=course.pk %}">
+                <i class="bi bi-arrow-left me-2"></i>{{ course.title }}
+            </a>
+            <div class="d-flex align-items-center">
+                <div class="text-light me-3 small d-none d-md-block">
+                    <span id="progress-text">0/{{ videos|length }} videolar ko'rilgan</span>
+                </div>
+                <div class="progress bg-secondary me-3" style="width: 120px;">
+                    <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 0%;" 
+                         aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <a href="{% url 'profile' %}" class="btn btn-outline-light">
+                    <i class="bi bi-person-circle me-1"></i> Profil
+                </a>
+            </div>
+        </div>
+    </nav>
 
-    <video width="100%" height="400" controls>
-        <source src="{{ video.video_file.url }}" type="video/mp4">
-        Sizning brauzeringiz video qo‘llab-quvvatlamaydi.
-    </video>
-</div>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar with topics -->
+            <div class="col-lg-3 col-md-4 d-none d-md-block sidebar py-3">
+                <h5 class="px-3 mb-3">Mavzular</h5>
+                <div class="list-group list-group-flush">
+                    {% for mod in course.modules.all %}
+                        <div class="px-3 fw-bold text-secondary small mt-3">{{ mod.title }}</div>
+                        {% for top in mod.topics.all %}
+                            <a href="{% url 'topic_detail' pk=course.pk topic_id=top.id %}" 
+                               class="list-group-item list-group-item-action border-0 py-2 topic-item {% if top.id == topic.id %}active{% endif %}">
+                                <div class="d-flex align-items-center">
+                                    <i class="bi {% if top.id == topic.id %}bi-play-circle-fill text-primary{% else %}bi-play-circle{% endif %} me-2"></i>
+                                    <span>{{ top.title }}</span>
+                                    <span class="ms-auto badge bg-secondary rounded-pill">{{ top.video_set.count }}</span>
+                                </div>
+                            </a>
+                        {% endfor %}
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Main content area -->
+            <div class="col-lg-9 col-md-8 col-sm-12 p-md-4 p-3">
+                <div class="row">
+                    <div class="col-xl-8 col-lg-12">
+                        <div class="card mb-4">
+                            <div class="card-body">
+                                <nav aria-label="breadcrumb">
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="{% url 'profile' %}">Kurslarim</a></li>
+                                        <li class="breadcrumb-item"><a href="{% url 'continue_learning' pk=course.pk %}">{{ course.title }}</a></li>
+                                        <li class="breadcrumb-item"><a href="#">{{ topic.module.title }}</a></li>
+                                        <li class="breadcrumb-item active">{{ topic.title }}</li>
+                                    </ol>
+                                </nav>
+                                
+                                <h2 class="h4">{{ topic.title }}</h2>
+                                <p class="text-muted">{{ topic.description }}</p>
+                                
+                                <div class="video-container mb-3">
+                                    <video id="main-video" controls width="100%" class="w-100">
+                                        <source src="" type="video/mp4">
+                                        Sizning brauzeringiz video formatini qo‘llab-quvvatlamaydi.
+                                    </video>
+                                </div>
+                                
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <h5 class="mb-0" id="current-video-title">Videoni tanlang</h5>
+                                    <div>
+                                        <button id="prev-btn" class="btn btn-outline-secondary btn-sm">
+                                            <i class="bi bi-arrow-left-circle"></i> Oldingi
+                                        </button>
+                                        <button id="next-btn" class="btn btn-primary btn-sm ms-2">
+                                            Keyingi <i class="bi bi-arrow-right-circle"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-body">
+                                <h5 class="card-title">Izohlar</h5>
+                                <div class="border p-3 rounded bg-light">
+                                    <p class="text-center text-muted mb-0">Izohlar funksiyasi tez orada ishga tushadi</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-xl-4 col-lg-12 mt-4 mt-xl-0">
+                        <div class="card">
+                            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Videolar ro'yxati</h5>
+                                <span class="badge bg-primary rounded-pill" id="video-count">{{ videos|length }}</span>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="list-group list-group-flush" id="video-list">
+                                    {% for video in videos %}
+                                        <div class="list-group-item list-group-item-action video-item" data-video-src="{{ video.video_file.url }}">
+                                            <div class="d-flex align-items-center">
+                                                <i class="bi bi-play-circle me-2"></i>
+                                                <div class="flex-grow-1 ms-2">
+                                                    <div class="d-flex justify-content-between">
+                                                        <h6 class="mb-0">{{ video.title }}</h6>
+                                                        <span class="badge bg-secondary">{{ video.duration|default:"00:00" }}</span>
+                                                    </div>
+                                                    <small class="text-muted">{{ video.description|truncatewords:5 }}</small>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    {% empty %}
+                                        <div class="list-group-item text-center text-muted py-4">
+                                            <i class="bi bi-exclamation-circle display-4 d-block mb-2"></i>
+                                            Hech qanday video topilmadi
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const videoPlayer = document.getElementById('main-video');
+            const videoItems = document.querySelectorAll('.video-item');
+            const currentVideoTitle = document.getElementById('current-video-title');
+            const nextBtn = document.getElementById('next-btn');
+            const prevBtn = document.getElementById('prev-btn');
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
+            
+            let currentVideoIndex = 0;
+            let completedVideos = new Set();
+            
+            // Initialize the first video if available
+            if (videoItems.length > 0) {
+                loadVideo(0);
+                
+                // Update progress
+                updateProgress();
+            }
+            
+            // Add click event to video items
+            videoItems.forEach((item, index) => {
+                item.addEventListener('click', () => {
+                    loadVideo(index);
+                });
+            });
+            
+            // Next button functionality
+            nextBtn.addEventListener('click', () => {
+                if (currentVideoIndex < videoItems.length - 1) {
+                    loadVideo(currentVideoIndex + 1);
+                }
+            });
+            
+            // Previous button functionality
+            prevBtn.addEventListener('click', () => {
+                if (currentVideoIndex > 0) {
+                    loadVideo(currentVideoIndex - 1);
+                }
+            });
+            
+            // Mark video as completed when ended
+            videoPlayer.addEventListener('ended', () => {
+                completedVideos.add(currentVideoIndex);
+                videoItems[currentVideoIndex].classList.add('completed');
+                updateProgress();
+                
+                // Auto-play next video if available
+                if (currentVideoIndex < videoItems.length - 1) {
+                    setTimeout(() => {
+                        loadVideo(currentVideoIndex + 1);
+                        videoPlayer.play();
+                    }, 2000);
+                }
+            });
+            
+            function loadVideo(index) {
+                currentVideoIndex = index;
+                const videoSrc = videoItems[index].getAttribute('data-video-src');
+                const videoTitle = videoItems[index].querySelector('h6').textContent;
+                
+                videoPlayer.src = videoSrc;
+                currentVideoTitle.textContent = videoTitle;
+                
+                // Update active state
+                videoItems.forEach(item => item.classList.remove('active'));
+                videoItems[index].classList.add('active');
+                
+                // Update button states
+                prevBtn.disabled = index === 0;
+                nextBtn.disabled = index === videoItems.length - 1;
+                
+                // Try to play the video
+                videoPlayer.load();
+            }
+            
+            function updateProgress() {
+                const progress = (completedVideos.size / videoItems.length) * 100;
+                progressBar.style.width = `${progress}%`;
+                progressBar.setAttribute('aria-valuenow', progress);
+                progressText.textContent = `${completedVideos.size}/${videoItems.length} videolar ko'rilgan`;
+            }
+        });
+    </script>
 </body>
 </html>
