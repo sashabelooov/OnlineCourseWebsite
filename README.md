@@ -9,3 +9,8 @@ Login page -->
 <img width="1520" height="722" alt="image" src="https://github.com/user-attachments/assets/8d85928d-312b-4539-968e-711edeb046b7" />
 Register page -->
 <img width="1520" height="722" alt="image" src="https://github.com/user-attachments/assets/c0a7388f-c2e9-4ef0-8d2e-03d35f1e2b43" />
+
+User Dashboar page
+<img width="1520" height="722" alt="image" src="https://github.com/user-attachments/assets/3c342c61-8f03-4749-b3bd-d0ddd30253f6" />
+
+<img width="1520" height="722" alt="image" src="https://github.com/user-attachments/assets/4500f53d-008a-4bc2-a0e6-61f8d4c9b7af" />
