@@ -42,6 +42,16 @@
         .progress {
             height: 8px;
         }
+        .empty-video-state {
+            text-align: center;
+            padding: 3rem;
+            color: #6c757d;
+        }
+        .empty-video-state i {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            color: #dee2e6;
+        }
     </style>
 </head>
 <body>
@@ -80,7 +90,7 @@
                                 <div class="d-flex align-items-center">
                                     <i class="bi {% if top.id == topic.id %}bi-play-circle-fill text-primary{% else %}bi-play-circle{% endif %} me-2"></i>
                                     <span>{{ top.title }}</span>
-                                    <span class="ms-auto badge bg-secondary rounded-pill">{{ top.video_set.count }}</span>
+                                    <span class="ms-auto badge bg-secondary rounded-pill">{{ top.videos.count }}</span>
                                 </div>
                             </a>
                         {% endfor %}
@@ -106,6 +116,7 @@
                                 <h2 class="h4">{{ topic.title }}</h2>
                                 <p class="text-muted">{{ topic.description }}</p>
                                 
+                                {% if videos %}
                                 <div class="video-container mb-3">
                                     <video id="main-video" controls width="100%" class="w-100">
                                         <source src="" type="video/mp4">
@@ -124,6 +135,13 @@
                                         </button>
                                     </div>
                                 </div>
+                                {% else %}
+                                <div class="empty-video-state">
+                                    <i class="bi bi-film"></i>
+                                    <h4>Hozircha videolar mavjud emas</h4>
+                                    <p class="text-muted">Ushbu mavzuga videolar tez orada qo'shiladi</p>
+                                </div>
+                                {% endif %}
                             </div>
                         </div>
                         
@@ -137,6 +155,7 @@
                         </div>
                     </div>
                     
+                    {% if videos %}
                     <div class="col-xl-4 col-lg-12 mt-4 mt-xl-0">
                         <div class="card">
                             <div class="card-header bg-white d-flex justify-content-between align-items-center">
@@ -158,22 +177,19 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    {% empty %}
-                                        <div class="list-group-item text-center text-muted py-4">
-                                            <i class="bi bi-exclamation-circle display-4 d-block mb-2"></i>
-                                            Hech qanday video topilmadi
-                                        </div>
                                     {% endfor %}
                                 </div>
                             </div>
                         </div>
                     </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    {% if videos %}
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const videoPlayer = document.getElementById('main-video');
@@ -259,5 +275,6 @@
             }
         });
     </script>
+    {% endif %}
 </body>
 </html>

@@ -69,13 +69,13 @@ class Topic(models.Model):
 
 class Video(models.Model):
     module = models.ForeignKey(Module, related_name="videos", on_delete=models.CASCADE)
+    topic = models.ForeignKey(Topic, related_name="videos", on_delete=models.CASCADE, null=True, blank=True)  # Yangi qo'shilgan
     title = models.CharField(max_length=200)
     video_file = models.FileField(upload_to="videos/")
     duration = models.DurationField(null=True, blank=True)
 
     def __str__(self):
         return f"{self.module.title} → {self.title}"
-
 
 class Enrollment(models.Model):
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

@@ -76,8 +76,8 @@ def topic_detail(request, pk, topic_id):
     course = get_object_or_404(Course, pk=pk)
     topic = get_object_or_404(Topic, pk=topic_id, module__course=course)
     
-    # Get videos specifically for this topic's module
-    videos = Video.objects.filter(module=topic.module)
+    # Faqat ushbu mavzuga tegishli videolarni olish
+    videos = Video.objects.filter(topic=topic)
     
     # Check enrollment
     enrollment = Enrollment.objects.filter(user=request.user, course=course).first()
