@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Chat Interface</title>
+    <style>
+        /* --- Basic Reset & Font --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #171717;
+            color: #e0e0e0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* --- Sidebar Styles --- */
+        .sidebar {
+            width: 260px;
+            background-color: #202123;
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            transition: transform 0.3s ease-in-out;
+            position: fixed;
+            height: 100%;
+            z-index: 100;
+        }
+
+        .sidebar.closed {
+            transform: translateX(-100%);
+        }
+
+        .sidebar-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px 5px;
+            margin-bottom: 20px;
+        }
+
+        .sidebar-header .logo {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #ececec;
+        }
+        
+        .logo svg {
+            width: 28px;
+            height: 28px;
+        }
+
+        .sidebar-header .toggle-btn {
+            background: none;
+            border: 1px solid #4d4d4d;
+            border-radius: 5px;
+            color: #a7a7a7;
+            cursor: pointer;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .toggle-btn svg {
+            width: 20px;
+            height: 20px;
+        }
+
+        .new-chat-btn {
+            background-color: #343541;
+            color: #ececec;
+            border: 1px solid #4d4d4d;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: left;
+            font-size: 0.9rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .new-chat-btn:hover {
+            background-color: #40414f;
+        }
+        
+        .new-chat-btn svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .chat-history {
+            flex-grow: 1;
+            overflow-y: auto;
+        }
+        
+        .chat-history h3 {
+            font-size: 0.75rem;
+            color: #8e8e8e;
+            text-transform: uppercase;
+            padding: 10px 8px;
+        }
+
+        .chat-history ul {
+            list-style: none;
+        }
+
+        .chat-history li {
+            padding: 10px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            margin-bottom: 2px;
+        }
+
+        .chat-history li:hover {
+            background-color: #343541;
+        }
+
+        .sidebar-footer {
+            border-top: 1px solid #343541;
+            padding-top: 15px;
+            margin-top: 10px;
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 5px 8px;
+            border-radius: 6px;
+            cursor: pointer;
+        }
+        
+        .user-profile:hover {
+            background-color: #343541;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            background-color: #7b68ee;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        .user-name {
+            font-size: 0.9rem;
+        }
+        
+        .more-options {
+            color: #8e8e8e;
+        }
+
+
+        /* --- Main Content Styles --- */
+        .main-content {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100vh;
+            padding: 20px;
+            transition: margin-left 0.3s ease-in-out;
+            margin-left: 260px; /* Same as sidebar width */
+        }
+
+        .main-content.sidebar-closed {
+            margin-left: 0;
+        }
+        
+        .main-header {
+            position: absolute;
+            top: 15px;
+            left: 15px;
+        }
+
+        .chat-container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .main-logo {
+            margin-bottom: 20px;
+        }
+        
+        .main-logo svg {
+            width: 48px;
+            height: 48px;
+            fill: #8e8e8e;
+        }
+
+        .chat-container h2 {
+            font-size: 1.8rem;
+            font-weight: 500;
+            color: #c7c7c7;
+            margin-bottom: 40px;
+        }
+
+        .message-input-container {
+            width: 100%;
+            max-width: 768px;
+            background-color: #2a2a2e;
+            border-radius: 16px;
+            padding: 8px 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid #4d4d4d;
+        }
+
+        .message-input-container input {
+            flex-grow: 1;
+            background: none;
+            border: none;
+            outline: none;
+            color: #e0e0e0;
+            font-size: 1rem;
+        }
+        
+        .input-btn {
+            background: none;
+            border: 1px solid #555;
+            color: #b0b0b0;
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .input-btn.deepthink {
+            border-color: #4a67a8;
+            color: #8cb4ff;
+        }
+        
+        .input-btn svg {
+            width: 16px;
+            height: 16px;
+        }
+
+        .action-icons button {
+            background: none;
+            border: none;
+            color: #8e8e8e;
+            cursor: pointer;
+            padding: 5px;
+        }
+        
+        .action-icons button.send-btn {
+            background-color: #3d50b1;
+            color: white;
+            border-radius: 8px;
+            padding: 8px;
+            margin-left: 10px;
+        }
+
+        .action-icons svg {
+            width: 20px;
+            height: 20px;
+        }
+
+    </style>
+</head>
+<body>
+
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <a href="#" class="logo">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93s3.05-7.44 7-7.93v15.86zm2-15.86c1.03.13 2 .45 2.87.93L15 8h-3V4.07zM15 10h3l-1.87-1.07C15.68 9.32 15.35 9.65 15 10zm0 2v2h3l-1.87 1.07c.45-.87.77-1.84.9-2.87H15zm-2-2v-2h-3l1.87 1.07c.45.87.77 1.84.9 2.87H13z"></path></svg>
+                <span>MyProject</span>
+            </a>
+            <button class="toggle-btn" id="close-sidebar-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5" /></svg>
+            </button>
+        </div>
+
+        <button class="new-chat-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+            New Chat
+        </button>
+
+        <nav class="chat-history">
+            <h3>Today</h3>
+            <ul>
+                <li>Navbar and Course Info Section ...</li>
+                <li>Navbar'dan sonraki içeriği kurs b...</li>
+                <li>Backend Course Layout and Desi...</li>
+            </ul>
+            <h3>Yesterday</h3>
+            <ul>
+                <li>from django.shortcuts import ren</li>
+                <li>HTML ve Python kodlarını to'g'irl...</li>
+                <li>Professional Course Topics Page ...</li>
+            </ul>
+        </nav>
+
+        <div class="sidebar-footer">
+            <div class="user-profile">
+                <div class="user-info">
+                    <div class="user-avatar">S</div>
+                    <span class="user-name">sasha belov</span>
+                </div>
+                <span class="more-options">...</span>
+            </div>
+        </div>
+    </aside>
+
+    <main class="main-content" id="main-content">
+        <div class="main-header">
+             <button class="toggle-btn" id="open-sidebar-btn" style="display: none;">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" /></svg>
+            </button>
+        </div>
+       
+        <div class="chat-container">
+            <div class="main-logo">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 17.93c-3.95-.49-7-3.85-7-7.93s3.05-7.44 7-7.93v15.86zm2-15.86c1.03.13 2 .45 2.87.93L15 8h-3V4.07zM15 10h3l-1.87-1.07C15.68 9.32 15.35 9.65 15 10zm0 2v2h3l-1.87 1.07c.45-.87.77-1.84.9-2.87H15zm-2-2v-2h-3l1.87 1.07c.45.87.77 1.84.9 2.87H13z"></path></svg>
+            </div>
+            <h2>How can I help you?</h2>
+
+            <div class="message-input-container">
+                <button class="input-btn deepthink">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456Z" /></svg>
+                    DeepThink
+                </button>
+                <button class="input-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" /></svg>
+                    Search
+                </button>
+
+                <input type="text" placeholder="Message DeepSeek">
+
+                <div class="action-icons">
+                    <button>
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M18.375 12.739a6.037 6.037 0 0 1-5.408 5.408M9.75 12.75h4.5m-4.5 0a3.75 3.75 0 0 1-3.75-3.75M9.75 12.75v4.5m0-4.5a3.75 3.75 0 0 0-3.75-3.75M12 12.75v-4.5m0 4.5a3.75 3.75 0 0 1 3.75-3.75m-3.75 3.75a3.75 3.75 0 0 0 3.75-3.75m-3.75-3.75h-4.5m4.5 0a3.75 3.75 0 0 1 3.75 3.75" /></svg>
+                    </button>
+                    <button class="send-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 10.5 12 3m0 0 7.5 7.5M12 3v18" /></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const sidebar = document.getElementById('sidebar');
+            const mainContent = document.getElementById('main-content');
+            const openBtn = document.getElementById('open-sidebar-btn');
+            const closeBtn = document.getElementById('close-sidebar-btn');
+
+            // Function to close the sidebar
+            function closeSidebar() {
+                sidebar.classList.add('closed');
+                mainContent.classList.add('sidebar-closed');
+                openBtn.style.display = 'block'; // Show the open button
+            }
+
+            // Function to open the sidebar
+            function openSidebar() {
+                sidebar.classList.remove('closed');
+                mainContent.classList.remove('sidebar-closed');
+                openBtn.style.display = 'none'; // Hide the open button
+            }
+
+            // Event Listeners
+            closeBtn.addEventListener('click', closeSidebar);
+            openBtn.addEventListener('click', openSidebar);
+        });
+    </script>
+</body>
+</html>
